@@ -1,100 +1,44 @@
-let player = {
-  health: 10,
-  inventory: [],
-  currentLocation: "Crash Site"
-};
+function updateInventoryDisplay() {
+  const inventoryList = document.getElementById('inventoryList');
+  inventoryList.innerHTML = '';
 
-document.getElementById("startBtn").addEventListener("click", function () {
-  document.getElementById("intro").classList.add("hidden");
-  document.getElementById("gameUI").classList.remove("hidden");
-  startGame();
-});
-
-function startGame() {
-  updateScene("Crash Site", "images/crash_site_scene.png", "You wake up in the wreckage. Everything is silent. Time to look for clues.");
-  renderActions();
-}
-
-function updateScene(location, imagePath, desc) {
-  player.currentLocation = location;
-  document.getElementById("location").textContent = location;
-  document.getElementById("sceneImage").src = imagePath;
-  document.getElementById("description").textContent = desc;
-  document.getElementById("event").textContent = "";
-}
-
-function renderActions() {
-  const actions = document.getElementById("actions");
-  actions.innerHTML = `
-    <button onclick="readMap()">Read mysterious map</button>
-    <button onclick="followNoise()">Follow strange noise</button>
-    <button onclick="lookForPeople()">Look for people</button>
-    <button onclick="eatFood()">Eat food</button>
-    <button onclick="rest()">Rest</button>
-  `;
-
-  if (player.health >= 50) {
-    actions.innerHTML += `<button onclick="travelToBeach()">Travel to Beach</button>`;
+  if (player.inventory.length === 0) {
+    inventoryList.innerHTML = '<li>No items</li>';
+    return;
   }
+
+  player.inventory.forEach((item, index) => {
+    const li = document.createElement('li');
+    li.textContent = item;
+
+    const useBtn = document.createElement('button');
+    useBtn.textContent = 'Use';
+    useBtn.onclick = () => useItem(item, index);
+
+    const dropBtn = document.createElement('button');
+    dropBtn.textContent = 'Drop';
+    dropBtn.onclick = () => dropItem(index);
+
+    li.appendChild(useBtn);
+    li.appendChild(dropBtn);
+    inventoryList.appendChild(li);
+  });
 }
 
-function readMap() {
-  showEvent("You study the strange map — a red 'X' marks a distant area near the cliffs.");
-}
-
-function followNoise() {
-  showEvent("You hear rustling... but it disappears into the jungle.");
-}
-
-function lookForPeople() {
-  showEvent("No signs of survivors. Just more broken pieces of the fuselage.");
-}
-
-function eatFood() {
-  if (!player.inventory.includes("Food")) {
-    player.inventory.push("Food");
-    player.health += 15;
+function useItem(item, index) {
+  // Simple logic: using a first aid kit heals the player
+  if (item.toLowerCase().includes('first aid')) {
+    player.health = Math.min(player.health + 40, 100);
+    player.inventory.splice(index, 1);
     updateStats();
-    showEvent("You found a ration pack — it helps a little.");
+    updateInventoryDisplay();
+    alert('You used the First Aid Kit. Health restored!');
   } else {
-    showEvent("You've already eaten.");
+    alert(`You used the ${item}, but nothing happened.`);
   }
-  renderActions();
 }
 
-function rest() {
-  if (player.health < 100) {
-    player.health += 25;
-    updateStats();
-    showEvent("You rest for a while and gather strength.");
-  } else {
-    showEvent("You're already fully rested.");
-  }
-  renderActions();
-}
-
-function travelToBeach() {
-  updateScene("Beach", "images/beach_scene_arrival.png", "You arrive at a sunlit beach. The ocean stretches endlessly ahead.");
-  const actions = document.getElementById("actions");
-  actions.innerHTML = `
-    <button onclick="searchBeach()">Search the beach</button>
-    <button onclick="buildSignal()">Build a signal fire</button>
-  `;
-}
-
-function searchBeach() {
-  showEvent("You find shells, driftwood, and a strange polished stone...");
-}
-
-function buildSignal() {
-  showEvent("You start collecting wood and stacking it into a visible shape.");
-}
-
-function updateStats() {
-  document.getElementById("health").textContent = `${Math.min(player.health, 100)}%`;
-  document.getElementById("inventory").textContent = player.inventory.length ? player.inventory.join(", ") : "Empty";
-}
-
-function showEvent(text) {
-  document.getElementById("event").textContent = text;
-}
+function dropItem(index) {
+  const droppedItem = player.inventory.splice(index, 1)[0];
+  updateInventoryDisplay();
+  alert(`You dropped: ${droppedItem}`);
