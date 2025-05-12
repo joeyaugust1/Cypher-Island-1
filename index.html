@@ -2,22 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cypher Island</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="background"></div>
-  <div id="overlay">
-    <h2>Cypher Island – Part One</h2>
-    <p id="introText">
-      You're on a flight to Germany when the plane suddenly hits massive turbulence...
+  <div id="intro">
+    <h1>Cypher Island – Part One</h1>
+    <p>
+      You're on a flight to Germany when the plane suddenly hits massive turbulence. Chaos erupts — the lights flicker, passengers scream, and then darkness. 
+      By some twist of fate, the plane crash-lands on an unknown island. 
+      When you regain consciousness, you're alone, injured, and disoriented — your health is critical (10%). 
+      Around you lies scattered debris, torn luggage, and wreckage of the plane... but no other survivors are in sight. 
+      You must search the crash site for anything useful — clues, supplies, or answers. 
+      Among the wreckage, you uncover a mysterious map of the island, a first aid kit, some spare clothing, and other apparel that may prove valuable later. 
+      Once your health is restored with food and rest, you’ll gain the strength to explore. 
+      From here, you’ll be able to travel to nearby sub-locations or begin following the main path — a journey full of choices, dangers, and the hope of escape.
     </p>
-    <button onclick="startGame()">Begin</button>
+    <button id="startBtn">Begin</button>
   </div>
 
   <div id="gameUI" class="hidden">
     <h3 id="location">Crash Site</h3>
+    <img id="sceneImage" src="" alt="Scene" />
     <p id="description"></p>
     <div id="actions"></div>
     <p><strong>Time:</strong> <span id="time">08:00</span></p>
@@ -28,4 +35,4 @@
 
   <script src="script.js"></script>
 </body>
-    </html
+</html
