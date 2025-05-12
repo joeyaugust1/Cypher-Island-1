@@ -1,71 +1,42 @@
-let state = {
-  location: 'Crash Site',
-  time: 480, // in minutes (08:00)
-  health: 10,
-  inventory: [],
-};
-
-const locations = {
-  'Crash Site': {
-    description: 'Wreckage surrounds you. You are alone, injured and weak.',
-    image: 'images/crash_site_scene.png',
-    actions: ['Read mysterious map', 'Follow strange noise', 'Look for people', 'Eat food', 'Rest'],
-  },
-  'Beach': {
-    description: 'You arrive at the beach, waves crashing gently. It’s peaceful — but lonely.',
-    image: 'images/beach_scene_arrival.png',
-    actions: ['Search for supplies', 'Rest', 'Look around'],
-  },
-  'Coast Cliffs': {
-    description: 'Steep cliffs block your path. No way around. You need to find another route.',
-    image: 'images/coast_cliffs_scene.png',
-    actions: ['Inspect cliff face', 'Listen for sound', 'Go back'],
-  },
-};
+document.getElementById("startBtn").addEventListener("click", function () {
+  document.getElementById("intro").classList.add("hidden");
+  document.getElementById("gameUI").classList.remove("hidden");
+  startGame();
+});
 
 function startGame() {
-  document.getElementById('overlay').classList.add('hidden');
-  document.getElementById('gameUI').classList.remove('hidden');
-  updateScene();
+  const sceneImage = document.getElementById("sceneImage");
+  const description = document.getElementById("description");
+  const actions = document.getElementById("actions");
+
+  sceneImage.src = "images/crash_site_scene.png";
+  description.textContent = "You wake up in the wreckage. Everything is silent. Time to look for clues.";
+  actions.innerHTML = `
+    <button onclick="readMap()">Read mysterious map</button>
+    <button onclick="followNoise()">Follow strange noise</button>
+    <button onclick="lookForPeople()">Look for people</button>
+    <button onclick="eatFood()">Eat food</button>
+    <button onclick="rest()">Rest</button>
+  `;
 }
 
-function updateScene() {
-  const loc = locations[state.location];
-  document.getElementById('location').textContent = state.location;
-  document.getElementById('description').textContent = loc.description;
-  document.getElementById('health').textContent = state.health + '%';
-  document.getElementById('inventory').textContent = state.inventory.join(', ') || 'Empty';
-  document.getElementById('time').textContent = formatTime(state.time);
-  document.getElementById('background').style.backgroundImage = `url('${loc.image}')`;
-
-  const actionsDiv = document.getElementById('actions');
-  actionsDiv.innerHTML = '';
-  loc.actions.forEach(action => {
-    const btn = document.createElement('button');
-    btn.textContent = action;
-    btn.onclick = () => handleAction(action);
-    actionsDiv.appendChild(btn);
-  });
+function readMap() {
+  document.getElementById("event").textContent = "You study the strange map — a red 'X' marks a distant area near the cliffs.";
 }
 
-function handleAction(action) {
-  // For now, simulate travel for "Follow strange noise" or other sample actions
-  if (action === 'Follow strange noise') {
-    state.location = 'Beach';
-    state.time += 30;
-  } else if (action === 'Inspect cliff face') {
-    state.time += 20;
-  } else if (action === 'Go back') {
-    state.location = 'Beach';
-    state.time += 15;
-  } else {
-    state.time += 10;
-  }
-
-  updateScene();
+function followNoise() {
+  document.getElementById("event").textContent = "You hear rustling... but it disappears into the jungle.";
 }
 
-function formatTime(minutes) {
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-  return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+function lookForPeople() {
+  document.getElementById("event").textContent = "No signs of survivors. Just more broken pieces of the fuselage.";
+}
+
+function eatFood() {
+  document.getElementById("event").textContent = "You found a ration pack — it helps a little.";
+  document.getElementById("health").textContent = "25%";
+}
+
+function rest() {
+  document.getElementById("event").textContent = "You take a moment to rest and gather strength.";
+}
