@@ -1,128 +1,149 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cypher Island</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #0a0a0a;
-      color: #e0e0e0;
+      background: #f4f4f4;
       padding: 20px;
+      color: #333;
     }
-    #game {
+    #gameUI {
       max-width: 600px;
       margin: auto;
-      background: #1a1a1a;
+      background: white;
       padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.7);
     }
     button {
       margin: 5px;
       padding: 10px;
-      background-color: #333;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
     }
-    button:hover {
-      background-color: #555;
-    }
-    .hidden {
-      display: none;
+    img {
+      width: 100%;
+      max-width: 100%;
+      border-radius: 10px;
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
-  <div id="game">
-    <div id="intro">
-      <h2>Cypher Island – Part One</h2>
-      <p>
-        You're on a flight to Germany when the plane suddenly hits massive turbulence. Chaos erupts — the lights flicker, passengers scream, and then darkness.<br><br>
-        By some twist of fate, the plane crash-lands on an unknown island.<br><br>
-        When you regain consciousness, you're alone, injured, and disoriented — your health is critical (10%). Around you lies scattered debris, torn luggage, and wreckage of the plane... but no other survivors are in sight.<br><br>
-        You must search the crash site for anything useful — clues, supplies, or answers.<br><br>
-        Among the wreckage, you uncover a mysterious map of the island, a first aid kit, some spare clothing, and other apparel that may prove valuable later.<br><br>
-        Once your health is restored with food and rest, you’ll gain the strength to explore. From here, you’ll be able to travel to nearby sub-locations or begin following the main path — a journey full of choices, dangers, and the hope of escape.
-      </p>
-      <button onclick="startGame()">Begin</button>
-    </div><div id="gameUI" class="hidden">
-  <h3 id="location">Crash Site</h3>
-  <p id="description"></p>
-  <div>
-    <button onclick="searchArea()">Search Area</button>
-    <button onclick="rest()">Rest</button>
-    <button onclick="travel()">Travel</button>
+
+  <div id="intro">
+    <h2>Cypher Island – Part One</h2>
+    <p>
+      You're on a flight to Germany when the plane suddenly hits massive turbulence. Chaos erupts — the lights flicker, passengers scream, and then darkness.<br><br>
+      By some twist of fate, the plane crash-lands on an unknown island.<br><br>
+      When you regain consciousness, you're alone, injured, and disoriented — your health is critical (10%). Around you lies scattered debris, torn luggage, and wreckage of the plane... but no other survivors are in sight.<br><br>
+      You must search the crash site for anything useful — clues, supplies, or answers.<br><br>
+      Among the wreckage, you uncover a mysterious map of the island, a first aid kit, some spare clothing, and other apparel that may prove valuable later.<br><br>
+      Once your health is restored with food and rest, you’ll gain the strength to explore. From here, you’ll be able to travel to nearby sub-locations or begin following the main path — a journey full of choices, dangers, and the hope of escape.
+    </p>
+    <button onclick="startGame()">Begin</button>
   </div>
-  <p><strong>Time:</strong> <span id="time">08:00</span></p>
-  <p><strong>Health:</strong> <span id="health">10%</span></p>
-  <p><strong>Inventory:</strong> <span id="inventory">Empty</span></p>
-  <p id="event"></p>
-</div>
 
-  </div>  <script>
-    let time = 8; // 8:00
-    let health = 10;
-    let inventory = [];
-    let currentLocation = 0;
+  <div id="gameUI" class="hidden">
+    <h3 id="location">Location</h3>
+    <img id="sceneImage" src="" alt="Scene image" />
+    <p id="description"></p>
+    <div id="actions"></div>
+    <p><strong>Time:</strong> <span id="time">08:00</span></p>
+    <p><strong>Health:</strong> <span id="health">10%</span></p>
+    <p><strong>Inventory:</strong> <span id="inventory">Empty</span></p>
+    <p id="event"></p>
+  </div>
 
-    const locations = ["Crash Site", "Beach", "Coast Cliffs"];
-
-    const descriptions = {
-      "Crash Site": "You are surrounded by debris. The jungle looms nearby.",
-      "Beach": "Waves crash gently as you find signs of recent activity.",
-      "Coast Cliffs": "Steep cliffs block easy passage, but there might be a way around."
+  <script>
+    const locations = {
+      "Crash Site": {
+        name: "Crash Site",
+        description: "You awaken at the crash site. Debris is everywhere. The jungle presses in from all sides.",
+        image: "images/crash_site_scene.png",
+        actions: [
+          { text: "Read mysterious map", handler: () => addToInventory("Mysterious Map") },
+          { text: "Follow strange noise", handler: () => addEvent("You follow the noise... but find nothing — yet.") },
+          { text: "Look for people", handler: () => addEvent("You call out. No one answers.") },
+          { text: "Eat food", handler: () => adjustHealth(10) },
+          { text: "Rest", handler: () => adjustHealth(20) },
+          { text: "Travel to Beach", handler: () => travelTo("Beach") }
+        ]
+      },
+      "Beach": {
+        name: "Beach",
+        description: "You arrive at a quiet beach. The waves crash gently. There are signs someone else may have passed through.",
+        image: "images/beach_scene_arrival.png",
+        actions: [
+          { text: "Search shoreline", handler: () => addToInventory("Shell Knife") },
+          { text: "Look for water", handler: () => addEvent("You find a stream nearby.") },
+          { text: "Travel to Coast Cliffs", handler: () => travelTo("Coast Cliffs") }
+        ]
+      },
+      "Coast Cliffs": {
+        name: "Coast Cliffs",
+        description: "Towering cliffs block your path. The ridge stretches inland — impassable and rugged.",
+        image: "images/coast_cliffs_scene.png",
+        actions: [
+          { text: "Inspect cliff face", handler: () => addEvent("It's steep and dangerous — you need climbing gear.") },
+          { text: "Return to Beach", handler: () => travelTo("Beach") }
+        ]
+      }
     };
 
+    let currentTime = 480; // 08:00 in minutes
+    let currentHealth = 10;
+    let inventory = [];
+
     function startGame() {
-      document.getElementById('intro').classList.add('hidden');
-      document.getElementById('gameUI').classList.remove('hidden');
-      updateUI();
+      document.getElementById("intro").style.display = "none";
+      document.getElementById("gameUI").style.display = "block";
+      updateLocation("Crash Site");
     }
 
-    function updateUI() {
-      document.getElementById("location").textContent = locations[currentLocation];
-      document.getElementById("description").textContent = descriptions[locations[currentLocation]];
-      document.getElementById("time").textContent = `${time}:00`;
-      document.getElementById("health").textContent = `${health}%`;
-      document.getElementById("inventory").textContent = inventory.length ? inventory.join(", ") : "Empty";
+    function updateLocation(key) {
+      const location = locations[key];
+      document.getElementById("location").textContent = location.name;
+      document.getElementById("description").textContent = location.description;
+      document.getElementById("sceneImage").src = location.image;
+      document.getElementById("actions").innerHTML = "";
+      location.actions.forEach(action => {
+        const btn = document.createElement("button");
+        btn.textContent = action.text;
+        btn.onclick = action.handler;
+        document.getElementById("actions").appendChild(btn);
+      });
     }
 
-    function searchArea() {
-      const foundItems = ["Berries", "Stick", "Map", "Clothes", "First Aid Kit"];
-      const item = foundItems[Math.floor(Math.random() * foundItems.length)];
-      inventory.push(item);
-      document.getElementById("event").textContent = `You found a ${item}.`;
-      updateUI();
+    function travelTo(locationName) {
+      advanceTime(30);
+      updateLocation(locationName);
     }
 
-    function rest() {
-      health = Math.min(health + 10, 100);
-      time++;
-      document.getElementById("event").textContent = "You rested and regained health.";
-      updateUI();
+    function advanceTime(minutes) {
+      currentTime += minutes;
+      if (currentTime >= 1440) currentTime -= 1440;
+      const hours = Math.floor(currentTime / 60);
+      const mins = currentTime % 60;
+      document.getElementById("time").textContent = `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
     }
 
-    function travel() {
-      time++;
-      currentLocation = (currentLocation + 1) % locations.length;
-
-      if (Math.random() < 0.4) {
-        const randomEvents = [
-          "You hear strange rustling in the bushes...",
-          "You stumble upon a hidden path.",
-          "A wild animal eyes you from a distance...",
-          "You spot a campfire far away. Someone might be out there."
-        ];
-        const event = randomEvents[Math.floor(Math.random() * randomEvents.length)];
-        document.getElementById("event").textContent = event;
-      } else {
-        document.getElementById("event").textContent = "You traveled to a new location.";
-      }
-
-      updateUI();
+    function adjustHealth(amount) {
+      currentHealth = Math.min(100, currentHealth + amount);
+      document.getElementById("health").textContent = `${currentHealth}%`;
     }
-  </script></body>
-</html>
+
+    function addToInventory(item) {
+      if (!inventory.includes(item)) inventory.push(item);
+      document.getElementById("inventory").textContent = inventory.join(", ");
+      addEvent(`${item} added to your inventory.`);
+    }
+
+    function addEvent(text) {
+      document.getElementById("event").textContent = text;
+    }
+  </script>
+
+</body>
+</html
