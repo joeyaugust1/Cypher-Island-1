@@ -82,7 +82,6 @@ function updateUI(locationKey) {
   document.getElementById("sceneImage").src = data.image;
   document.getElementById("description").textContent = data.description;
   document.getElementById("health").textContent = `${currentHealth}%`;
-  document.getElementById("time").textContent = currentTime;
 
   const actionsContainer = document.getElementById("actions");
   actionsContainer.innerHTML = "";
