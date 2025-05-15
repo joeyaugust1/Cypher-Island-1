@@ -1,88 +1,26 @@
-document.getElementById("startBtn").addEventListener("click", () => {
-  document.getElementById("intro").classList.add("hidden");
-  document.getElementById("gameUI").classList.remove("hidden");
-  startGame();
-});
+// Cypher Island Game Script with UI Status Support
 
-let player = {
-  health: 10,
-  time: "08:00",
-  location: "Crash Site",
-  inventory: []
-};
+let currentHealth = 10; let currentTime = "08:00"; let inventory = []; let currentLocation = "Crash Site"; let uiStatus = "standard"; // "standard", "prompt", "puzzle", "map"
 
-function startGame() {
-  updateScene("images/imagescrash_site_scene.png", "You wake up at the crash site...");
-  updateStats();
-  showActions();
-}
+const locationData = { "Crash Site": { image: "images/crash_site_scene.png", description: "You awaken amidst the wreckage. Smoke rises in the distance...", actions: [ { text: "Search wreckage", effect: () => addToInventory("Mysterious Map") }, { text: "Use First Aid Kit", effect: () => updateHealth(40) } ] }, "Beach": { image: "images/beach_scene_arrival.png", description: "You step onto the warm sands of a nearby beach. The sea air is fresh.", actions: [ { text: "Rest under tree", effect: () => updateHealth(20) } ] } };
 
-function updateScene(imagePath, description) {
-  document.getElementById("sceneImage").src = imagePath;
-  document.getElementById("description").textContent = description;
-}
+function updateHealth(amount) { currentHealth = Math.min(currentHealth + amount, 100); document.getElementById("health").textContent = ${currentHealth}%; checkTravelOption(); }
 
-function updateStats() {
-  document.getElementById("health").textContent = `${player.health}%`;
-  document.getElementById("time").textContent = player.time;
-  document.getElementById("inventory").textContent = player.inventory.length ? player.inventory.join(", ") : "Empty";
+function addToInventory(item) { if (!inventory.includes(item)) inventory.push(item); updateInventoryDisplay(); }
 
-  renderInventoryList();
-}
+function updateInventoryDisplay() { const invSpan = document.getElementById("inventory"); invSpan.textContent = inventory.length > 0 ? inventory.join(", ") : "Empty";
 
-function showActions() {
-  const actionsDiv = document.getElementById("actions");
-  actionsDiv.innerHTML = "";
+const invList = document.getElementById("inventoryList"); invList.innerHTML = ""; inventory.forEach((item, i) => { const li = document.createElement("li"); li.textContent = item; const useBtn = document.createElement("button"); useBtn.textContent = "Use"; useBtn.className = "inventory-button"; useBtn.onclick = () => alert(Used ${item}); const dropBtn = document.createElement("button"); dropBtn.textContent = "Drop"; dropBtn.className = "inventory-button"; dropBtn.onclick = () => { inventory.splice(i, 1); updateInventoryDisplay(); }; li.appendChild(useBtn); li.appendChild(dropBtn); invList.appendChild(li); }); }
 
-  const searchBtn = document.createElement("button");
-  searchBtn.textContent = "Search Wreckage";
-  searchBtn.onclick = () => {
-    player.health += 20;
-    player.inventory.push("Map", "First Aid Kit");
-    document.getElementById("event").textContent = "You found useful items!";
-    updateStats();
-    showActions();
-  };
-  actionsDiv.appendChild(searchBtn);
+function updateUI(locationKey) { const data = locationData[locationKey]; document.getElementById("location").textContent = locationKey; document.getElementById("sceneImage").src = data.image; document.getElementById("description").textContent = data.description; document.getElementById("health").textContent = ${currentHealth}%; document.getElementById("time").textContent = currentTime;
 
-  if (player.health >= 50) {
-    const travelBtn = document.createElement("button");
-    travelBtn.textContent = "Travel to Beach";
-    travelBtn.onclick = () => {
-      player.location = "Beach";
-      updateScene("images/imagesbeach_scene_arrival.png", "You arrive at the beach.");
-      document.getElementById("location").textContent = "Beach";
-      document.getElementById("event").textContent = "You've traveled to the beach.";
-    };
-    actionsDiv.appendChild(travelBtn);
-  }
-}
+const actionsDiv = document.getElementById("actions"); actionsDiv.innerHTML = ""; data.actions.forEach(action => { const btn = document.createElement("button"); btn.textContent = action.text; btn.onclick = () => { action.effect(); if (action.text.toLowerCase().includes("search") || action.text.toLowerCase().includes("use")) { uiStatus = "prompt"; document.getElementById("secondaryText").textContent = You performed: ${action.text}; } }; actionsDiv.appendChild(btn); });
 
-function renderInventoryList() {
-  const list = document.getElementById("inventoryList");
-  list.innerHTML = "";
+// Toggle sections based on UI status document.getElementById("secondaryText").style.display = uiStatus === "prompt" || uiStatus === "puzzle" || uiStatus === "map" ? "block" : "none"; document.getElementById("puzzleSection").style.display = uiStatus === "puzzle" ? "block" : "none"; document.getElementById("mapSection").style.display = uiStatus === "map" ? "block" : "none"; }
 
-  player.inventory.forEach((item, index) => {
-    const li = document.createElement("li");
-    li.textContent = item;
+function checkTravelOption() { const travelButton = document.createElement("button"); travelButton.textContent = "Travel to Beach"; travelButton.onclick = () => { currentLocation = "Beach"; uiStatus = "standard"; updateUI(currentLocation); };
 
-    const useBtn = document.createElement("button");
-    useBtn.textContent = "Use";
-    useBtn.className = "inventory-button";
-    useBtn.onclick = () => {
-      document.getElementById("event").textContent = `You used ${item}.`;
-    };
+if (currentHealth >= 50 && !document.getElementById("actions").textContent.includes("Travel to Beach")) { document.getElementById("actions").appendChild(travelButton); } }
 
-    const dropBtn = document.createElement("button");
-    dropBtn.textContent = "Drop";
-    dropBtn.className = "inventory-button";
-    dropBtn.onclick = () => {
-      player.inventory.splice(index, 1);
-      updateStats();
-    };
+document.getElementById("startBtn").addEventListener("click", () => { document.getElementById("intro").classList.add("hidden"); document.getElementById("gameUI").classList.remove("hidden"); updateUI(currentLocation); });
 
-    li.appendChild(useBtn);
-    li.appendChild(dropBtn);
-    list.appendChild(li);
-  });
-    }
