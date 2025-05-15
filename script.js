@@ -1,10 +1,8 @@
-// Cypher Island Game Script with UI Status Support
+// Cypher Island Game Script (Time removed)
 
 let currentHealth = 10;
-let currentTime = "08:00";
 let inventory = [];
 let currentLocation = "Crash Site";
-let uiStatus = "standard"; // "standard", "prompt", "puzzle", "map"
 
 document.addEventListener("DOMContentLoaded", () => {
   const startBtn = document.getElementById("startBtn");
@@ -39,7 +37,6 @@ const locationData = {
 function updateHealth(amount) {
   currentHealth = Math.min(currentHealth + amount, 100);
   document.getElementById("health").textContent = `${currentHealth}%`;
-  checkTravelOption(); // Optional: only if implemented
 }
 
 function addToInventory(item) {
@@ -78,7 +75,6 @@ function updateInventoryDisplay() {
 
 function updateUI(locationKey) {
   const data = locationData[locationKey];
-  document.getElementById("location").textContent = locationKey;
   document.getElementById("sceneImage").src = data.image;
   document.getElementById("description").textContent = data.description;
   document.getElementById("health").textContent = `${currentHealth}%`;
