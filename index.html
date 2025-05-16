@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -45,34 +46,36 @@
     <h1 id="sceneTitle"></h1>
     <p id="sceneText"></p>
     <button id="nextBtn">Next</button>
-  </div>  <script>
+  </div>
+
+  <script>
     const scenes = [
-      {
-        title: "Crash Site",
-        text: "You wake in a twisted seat among smoldering debris. Smoke drifts through the shattered fuselage. Flames flicker in the distance. You're alone. The wreckage is torn apart — no passengers, no bodies. Just silence and ruin. Your body aches, your vision swims, and your health is critical.",
-        bg: "#2f2f2f"
-      },
-      {
-        title: "Beach",
-        text: "Stumbling from the crash site, you reach a shoreline drenched in fading sunlight. Waves crash against the sand. The wreckage trail ends here. No footprints. No survivors. The ocean stretches endlessly — no boats, no planes in sight.",
-        bg: "#5a4f3c"
-      },
-      {
-        title: "Cliffs",
-        text: "You reach the edge of the beach — sheer cliffs rise before you, black stone slick with sea spray. The way forward is blocked. With no way around, you turn inland toward the dense jungle.",
-        bg: "#3a3a3a"
-      },
-      {
-        title: "River",
-        text: "Pushing through tangled undergrowth, you find a flowing river cutting through the island. It offers a moment of relief. You drink and clean your wounds. A current of tension remains — you're being watched. You decide to follow the river upstream.",
-        bg: "#3c4c48"
-      },
-      {
-        title: "Forest Edge",
-        text: "The river leads you into a forest with a canopy so thick it steals the sunlight. Ferns rustle. Something — someone? — was here before. A faint trail branches off from the river path.",
-        bg: "#2e3d2e"
-      }
-      // Add more scenes as needed
+      { title: "Crash Site", text: "You wake in a twisted seat among smoldering debris...", bg: "#3a3a3a" },
+      { title: "Beach", text: "Stumbling from the crash site, you reach a shoreline...", bg: "#bba85a" },
+      { title: "Cliffs", text: "You reach the edge of the beach — sheer cliffs rise...", bg: "#444" },
+      { title: "River", text: "You find a flowing river cutting through the island...", bg: "#4a7a6c" },
+      { title: "Forest", text: "The river leads you into a forest...", bg: "#385438" },
+      { title: "Overgrown Camp", text: "You stumble upon what’s left of an old expedition...", bg: "#5a4b3c" },
+      { title: "Animal Clearing", text: "In a quiet clearing, you spot a wild boar...", bg: "#446644" },
+      { title: "Cave Mouth", text: "A narrow cave looms at the base of a mossy slope...", bg: "#1e1e1e" },
+      { title: "Cavern Interior", text: "Inside, the cavern glows faintly with crystal outcroppings...", bg: "#223344" },
+      { title: "Signal Tower", text: "High ground reveals the skeleton of a communication tower...", bg: "#666666" },
+      { title: "Bamboo Thicket", text: "You pass through a dense wall of bamboo...", bg: "#3c5e3c" },
+      { title: "Old Watch Post", text: "An old lookout tower creaks in the wind...", bg: "#4c4c4c" },
+      { title: "Swamp", text: "Swamp water gurgles and bubbles...", bg: "#556b2f" },
+      { title: "Forgotten Shrine", text: "Half-buried in vines, a stone shrine looms...", bg: "#5a5a5a" },
+      { title: "Weather Station", text: "A small building sits atop a rise...", bg: "#2c2c2c" },
+      { title: "Ravine", text: "You descend into a deep, dry ravine...", bg: "#7b5e57" },
+      { title: "Waterfall Cave", text: "Behind a thunderous waterfall lies a damp cave...", bg: "#1b2b33" },
+      { title: "Labyrinth", text: "Massive, moss-covered stones form a labyrinth...", bg: "#2e4d2e" },
+      { title: "Bone Field", text: "An open plain littered with bones — human and otherwise...", bg: "#8b5e3c" },
+      { title: "Echo Valley", text: "Your voice returns in impossible whispers...", bg: "#333344" },
+      { title: "Crossroads Tree", text: "A massive, gnarled tree splits the path in four...", bg: "#3e3a2f" },
+      { title: "Crater Ridge", text: "The earth here is blackened and broken...", bg: "#2e2e2e" },
+      { title: "Hidden Library", text: "A landslide reveals a stone door leading into a secret archive...", bg: "#4c3a3a" },
+      { title: "Lake Cypher", text: "A mirror-like lake lies quiet, untouched...", bg: "#3c4e6b" },
+      { title: "Lake Cypher (Return)", text: "You return — this time with the key retrieved...", bg: "#35495e" },
+      { title: "Mt. Cypher", text: "At the peak lies a hidden chamber...", bg: "#000000" }
     ];
 
     let current = 0;
@@ -93,10 +96,11 @@
         showScene(current);
       } else {
         nextBtn.disabled = true;
-        nextBtn.textContent = "End of Preview";
+        nextBtn.textContent = "The End";
       }
     });
 
     showScene(current);
-  </script></body>
-  </html
+  </script>
+</body>
+</html>
