@@ -1,93 +1,136 @@
-// Cypher Island Game Script (Time removed)
+// script.js
 
-let currentHealth = 10;
-let inventory = [];
-let currentLocation = "Crash Site";
+const storyText = document.getElementById("storyText");
+const nextBtn = document.getElementById("nextBtn");
+const sceneContainer = document.getElementById("sceneContainer");
 
-document.addEventListener("DOMContentLoaded", () => {
-  const startBtn = document.getElementById("startBtn");
-  const intro = document.getElementById("intro");
-  const gameUI = document.getElementById("gameUI");
+const scenes = [
+  {
+    text: `You wake in a twisted seat among smoldering debris...`,
+    color: "#3a3a3a" // Crash site - dark gray
+  },
+  {
+    text: `Stumbling from the crash site, you reach a shoreline...`,
+    color: "#bba85a" // Beach - sandy yellow
+  },
+  {
+    text: `You reach the edge of the beach — sheer cliffs rise...`,
+    color: "#444" // Cliffs - dark rock
+  },
+  {
+    text: `You find a flowing river cutting through the island...`,
+    color: "#4a7a6c" // River - greenish blue
+  },
+  {
+    text: `The river leads you into a forest...`,
+    color: "#385438" // Forest - deep green
+  },
+  {
+    text: `You stumble upon what’s left of an old expedition...`,
+    color: "#5a4b3c" // Overgrown Camp - earthy
+  },
+  {
+    text: `In a quiet clearing, you spot a wild boar...`,
+    color: "#446644" // Animal Clearing - wild green
+  },
+  {
+    text: `A narrow cave looms at the base of a mossy slope...`,
+    color: "#1e1e1e" // Cave Mouth - near black
+  },
+  {
+    text: `Inside, the cavern glows faintly with crystal outcroppings...`,
+    color: "#223344" // Cavern Interior - cool glow
+  },
+  {
+    text: `High ground reveals the skeleton of a communication tower...`,
+    color: "#666666" // Signal Tower - gray
+  },
+  {
+    text: `You pass through a dense wall of bamboo...`,
+    color: "#3c5e3c" // Bamboo Thicket - green
+  },
+  {
+    text: `An old lookout tower creaks in the wind...`,
+    color: "#4c4c4c" // Old Watch Post - muted
+  },
+  {
+    text: `Swamp water gurgles and bubbles...`,
+    color: "#556b2f" // Swamp - swampy green
+  },
+  {
+    text: `Half-buried in vines, a stone shrine looms...`,
+    color: "#5a5a5a" // Forgotten Shrine - stone gray
+  },
+  {
+    text: `A small building sits atop a rise...`,
+    color: "#2c2c2c" // Weather Station - techy dark
+  },
+  {
+    text: `You descend into a deep, dry ravine...`,
+    color: "#7b5e57" // Ravine - dusty brown
+  },
+  {
+    text: `Behind a thunderous waterfall lies a damp cave...`,
+    color: "#1b2b33" // Waterfall Cave - damp blue
+  },
+  {
+    text: `Massive, moss-covered stones form a labyrinth...`,
+    color: "#2e4d2e" // Labyrinth - moss green
+  },
+  {
+    text: `An open plain littered with bones — human and otherwise...`,
+    color: "#8b5e3c" // Bone Field - faded brown
+  },
+  {
+    text: `Your voice returns in impossible whispers...`,
+    color: "#333344" // Echo Valley - echo blue
+  },
+  {
+    text: `A massive, gnarled tree splits the path in four...`,
+    color: "#3e3a2f" // Crossroads Tree - tree brown
+  },
+  {
+    text: `The earth here is blackened and broken...`,
+    color: "#2e2e2e" // Crater Ridge - burnt black
+  },
+  {
+    text: `A landslide reveals a stone door leading into a secret archive...`,
+    color: "#4c3a3a" // Hidden Library - dark red
+  },
+  {
+    text: `A mirror-like lake lies quiet, untouched...`,
+    color: "#3c4e6b" // Lake Cypher - lake blue
+  },
+  {
+    text: `You return — this time with the key retrieved...`,
+    color: "#35495e" // Lake Cypher (revisit)
+  },
+  {
+    text: `High winds and thin air make progress hard...`,
+    color: "#999999" // Mountain Pass - pale gray
+  },
+  {
+    text: `At the peak lies a hidden chamber...`,
+    color: "#000000" // Mt. Cypher (final)
+  }
+];
 
-  startBtn.addEventListener("click", () => {
-    intro.classList.add("hidden");
-    gameUI.classList.remove("hidden");
-    updateUI(currentLocation);
-  });
+let currentScene = 0;
+
+function showScene(index) {
+  if (index < scenes.length) {
+    storyText.textContent = scenes[index].text;
+    sceneContainer.style.backgroundColor = scenes[index].color;
+  } else {
+    storyText.textContent = "The End. Thank you for playing.";
+    nextBtn.disabled = true;
+  }
+}
+
+nextBtn.addEventListener("click", () => {
+  currentScene++;
+  showScene(currentScene);
 });
 
-const locationData = {
-  "Crash Site": {
-    image: "images/crash_site_scene.png",
-    description: "You awaken amidst the wreckage. Smoke rises in the distance...",
-    actions: [
-      { text: "Search wreckage", effect: () => addToInventory("Mysterious Map") },
-      { text: "Use First Aid Kit", effect: () => updateHealth(40) }
-    ]
-  },
-  "Beach": {
-    image: "images/beach_scene_arrival.png",
-    description: "You step onto the warm sands of a nearby beach. The sea air is fresh.",
-    actions: [
-      { text: "Rest under tree", effect: () => updateHealth(20) }
-    ]
-  }
-};
-
-function updateHealth(amount) {
-  currentHealth = Math.min(currentHealth + amount, 100);
-  document.getElementById("health").textContent = `${currentHealth}%`;
-}
-
-function addToInventory(item) {
-  if (!inventory.includes(item)) inventory.push(item);
-  updateInventoryDisplay();
-}
-
-function updateInventoryDisplay() {
-  const invSpan = document.getElementById("inventory");
-  invSpan.textContent = inventory.length > 0 ? inventory.join(", ") : "Empty";
-
-  const invList = document.getElementById("inventoryList");
-  invList.innerHTML = "";
-  inventory.forEach((item, i) => {
-    const li = document.createElement("li");
-    li.textContent = item;
-
-    const useBtn = document.createElement("button");
-    useBtn.textContent = "Use";
-    useBtn.className = "inventory-button";
-    useBtn.onclick = () => alert(`Used ${item}`);
-
-    const dropBtn = document.createElement("button");
-    dropBtn.textContent = "Drop";
-    dropBtn.className = "inventory-button";
-    dropBtn.onclick = () => {
-      inventory.splice(i, 1);
-      updateInventoryDisplay();
-    };
-
-    li.appendChild(useBtn);
-    li.appendChild(dropBtn);
-    invList.appendChild(li);
-  });
-}
-
-function updateUI(locationKey) {
-  const data = locationData[locationKey];
-  document.getElementById("sceneImage").src = data.image;
-  document.getElementById("description").textContent = data.description;
-  document.getElementById("health").textContent = `${currentHealth}%`;
-
-  const actionsContainer = document.getElementById("actions");
-  actionsContainer.innerHTML = "";
-
-  data.actions.forEach(action => {
-    const btn = document.createElement("button");
-    btn.textContent = action.text;
-    btn.onclick = action.effect;
-    actionsContainer.appendChild(btn);
-  });
-
-  updateInventoryDisplay();
-    
+// Initial display
+showScene(currentScene)
