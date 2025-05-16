@@ -1,67 +1,102 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cypher Island</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Cypher Island – Story Mode</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Georgia', serif;
+      background-color: #1a1a1a;
+      color: #f2f2f2;
+    }
+    #storyContainer {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 30px;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 10px;
+    }
+    #sceneTitle {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    #sceneText {
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    #nextBtn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #555;
+      color: white;
+      cursor: pointer;
+    }
+    #nextBtn:hover {
+      background-color: #777;
+    }
+  </style>
 </head>
 <body>
-  <!-- Intro Screen -->
-  <div id="intro">
-    <h1>Cypher Island – Part One</h1>
-    <p>
-      You're on a flight to Germany when the plane suddenly hits massive turbulence. Chaos erupts — the lights flicker, passengers scream, and then darkness. 
-      By some twist of fate, the plane crash-lands on an unknown island. 
-      When you regain consciousness, you're alone, injured, and disoriented — your health is critical (10%). 
-      You must search the crash site for anything useful — clues, supplies, or answers.
-    </p>
-    <button id="startBtn">Begin</button>
-  </div>
+  <div id="storyContainer">
+    <h1 id="sceneTitle"></h1>
+    <p id="sceneText"></p>
+    <button id="nextBtn">Next</button>
+  </div>  <script>
+    const scenes = [
+      {
+        title: "Crash Site",
+        text: "You wake in a twisted seat among smoldering debris. Smoke drifts through the shattered fuselage. Flames flicker in the distance. You're alone. The wreckage is torn apart — no passengers, no bodies. Just silence and ruin. Your body aches, your vision swims, and your health is critical.",
+        bg: "#2f2f2f"
+      },
+      {
+        title: "Beach",
+        text: "Stumbling from the crash site, you reach a shoreline drenched in fading sunlight. Waves crash against the sand. The wreckage trail ends here. No footprints. No survivors. The ocean stretches endlessly — no boats, no planes in sight.",
+        bg: "#5a4f3c"
+      },
+      {
+        title: "Cliffs",
+        text: "You reach the edge of the beach — sheer cliffs rise before you, black stone slick with sea spray. The way forward is blocked. With no way around, you turn inland toward the dense jungle.",
+        bg: "#3a3a3a"
+      },
+      {
+        title: "River",
+        text: "Pushing through tangled undergrowth, you find a flowing river cutting through the island. It offers a moment of relief. You drink and clean your wounds. A current of tension remains — you're being watched. You decide to follow the river upstream.",
+        bg: "#3c4c48"
+      },
+      {
+        title: "Forest Edge",
+        text: "The river leads you into a forest with a canopy so thick it steals the sunlight. Ferns rustle. Something — someone? — was here before. A faint trail branches off from the river path.",
+        bg: "#2e3d2e"
+      }
+      // Add more scenes as needed
+    ];
 
-  <!-- Game UI -->
-  <div id="gameUI" class="hidden">
-    <!-- Scene Image -->
-    <img id="sceneImage" src="" alt="Scene Image" />
+    let current = 0;
+    const titleEl = document.getElementById('sceneTitle');
+    const textEl = document.getElementById('sceneText');
+    const nextBtn = document.getElementById('nextBtn');
 
-    <!-- Status Display -->
-    <div id="statusBar">
-      <p><strong>Health:</strong> <span id="health">10%</span></p>
-    </div>
+    function showScene(index) {
+      const scene = scenes[index];
+      titleEl.textContent = scene.title;
+      textEl.textContent = scene.text;
+      document.body.style.backgroundColor = scene.bg;
+    }
 
-    <!-- Story Text -->
-    <div id="storyText">
-      <p id="description"></p>
-    </div>
+    nextBtn.addEventListener('click', () => {
+      current++;
+      if (current < scenes.length) {
+        showScene(current);
+      } else {
+        nextBtn.disabled = true;
+        nextBtn.textContent = "End of Preview";
+      }
+    });
 
-    <!-- Optional Secondary Text -->
-    <div id="secondaryText" class="hidden">
-      <p id="secondaryContent"></p>
-    </div>
-
-    <!-- Action Buttons -->
-    <div id="actions"></div>
-
-    <!-- Puzzle Section -->
-    <div id="puzzleSection" class="hidden">
-      <h4>Puzzle</h4>
-      <div id="puzzleContent"></div>
-    </div>
-
-    <!-- Map Section -->
-    <div id="mapSection" class="hidden">
-      <h4>Map</h4>
-      <img id="mapImage" src="images/map_placeholder.png" alt="Map" />
-    </div>
-
-    <!-- Inventory Section -->
-    <div id="inventorySection">
-      <h4>Your Inventory</h4>
-      <p><strong>Inventory:</strong> <span id="inventory">Empty</span></p>
-      <ul id="inventoryList"></ul>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
-</body>
-</html>
+    showScene(current);
+  </script></body>
+  </html
