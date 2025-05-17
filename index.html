@@ -3,36 +3,96 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cypher Island</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Cypher Island – Story Mode</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Georgia', serif;
+      background-color: #1a1a1a;
+      color: #f2f2f2;
+      min-height: 100vh;
+    }
+    #storyContainer {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 30px;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 10px;
+    }
+    #sceneTitle {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    #sceneText {
+      font-size: 18px;
+      line-height: 1.6;
+      white-space: normal;
+      overflow: visible;
+      display: block;
+    }
+    #nextBtn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #555;
+      color: white;
+      cursor: pointer;
+    }
+    #nextBtn:hover {
+      background-color: #777;
+    }
+  </style>
 </head>
 <body>
-  <div id="intro">
-    <h1>Cypher Island – Part One</h1>
-    <p>
-      You're on a flight to Germany when the plane suddenly hits massive turbulence. Chaos erupts — the lights flicker, passengers scream, and then darkness. 
-      By some twist of fate, the plane crash-lands on an unknown island. 
-      When you regain consciousness, you're alone, injured, and disoriented — your health is critical (10%). 
-      Around you lies scattered debris, torn luggage, and wreckage of the plane... but no other survivors are in sight. 
-      You must search the crash site for anything useful — clues, supplies, or answers. 
-      Among the wreckage, you uncover a mysterious map of the island, a first aid kit, some spare clothing, and other apparel that may prove valuable later. 
-      Once your health is restored with food and rest, you’ll gain the strength to explore. 
-      From here, you’ll be able to travel to nearby sub-locations or begin following the main path — a journey full of choices, dangers, and the hope of escape.
-    </p>
-    <button id="startBtn">Begin</button>
+  <div id="storyContainer">
+    <h1 id="sceneTitle"></h1>
+    <p id="sceneText"></p>
+    <button id="nextBtn">Next</button>
   </div>
 
-  <div id="gameUI" class="hidden">
-    <h3 id="location">Crash Site</h3>
-    <img id="sceneImage" src="" alt="Scene" />
-    <p id="description"></p>
-    <div id="actions"></div>
-    <p><strong>Time:</strong> <span id="time">08:00</span></p>
-    <p><strong>Health:</strong> <span id="health">10%</span></p>
-    <p><strong>Inventory:</strong> <span id="inventory">Empty</span></p>
-    <p id="event"></p>
-  </div>
+  <script>
+    const scenes = [
+      {
+        title: "Crash Site",
+        text: "You wake in a twisted seat among smoldering debris. Smoke drifts through the shattered fuselage. Flames flicker in the distance. You're alone. The wreckage is torn apart — no passengers, no bodies. Just silence and ruin. Your body aches, your vision swims, and your health is critical.",
+        bg: "#2f2f2f"
+      },
+      {
+        title: "Beach",
+        text: "Stumbling from the crash site, you reach a shoreline drenched in fading sunlight. Waves crash against the sand. The wreckage trail ends here. No footprints. No survivors. The ocean stretches endlessly — no boats, no planes in sight.",
+        bg: "#5a4f3c"
+      }
+      // Add more scenes as needed
+    ];
 
-  <script src="script.js"></script>
+    let current = 0;
+    const titleEl = document.getElementById('sceneTitle');
+    const textEl = document.getElementById('sceneText');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function showScene(index) {
+      if (index < scenes.length) {
+        const scene = scenes[index];
+        titleEl.textContent = scene.title;
+        textEl.textContent = scene.text;
+        document.body.style.backgroundColor = scene.bg;
+      } else {
+        titleEl.textContent = "The End";
+        textEl.textContent = "Thank you for playing.";
+        nextBtn.disabled = true;
+        nextBtn.textContent = "End of Story";
+      }
+    }
+
+    nextBtn.addEventListener('click', () => {
+      current++;
+      showScene(current);
+    });
+
+    showScene(current);
+  </script>
 </body>
-  </html
+</html>
