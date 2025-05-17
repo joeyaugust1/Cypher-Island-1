@@ -2,16 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cypher Island – Story Mode</title>
   <style>
     body {
       margin: 0;
-      padding: 0;
       font-family: 'Georgia', serif;
       background-color: #1a1a1a;
       color: #f2f2f2;
-      min-height: 100vh;
     }
     #storyContainer {
       max-width: 800px;
@@ -27,9 +25,7 @@
     #sceneText {
       font-size: 18px;
       line-height: 1.6;
-      white-space: normal;
-      overflow: visible;
-      display: block;
+      white-space: pre-wrap;
     }
     #nextBtn {
       margin-top: 20px;
@@ -52,7 +48,6 @@
     <p id="sceneText"></p>
     <button id="nextBtn">Next</button>
   </div>
-
   <script>
     const scenes = [
       {
@@ -64,8 +59,97 @@
         title: "Beach",
         text: "Stumbling from the crash site, you reach a shoreline drenched in fading sunlight. Waves crash against the sand. The wreckage trail ends here. No footprints. No survivors. The ocean stretches endlessly — no boats, no planes in sight.",
         bg: "#5a4f3c"
+      },
+      {
+        title: "Cliffs",
+        text: "You reach the edge of the beach — sheer cliffs rise before you, black stone slick with sea spray. The way forward is blocked. With no way around, you turn inland toward the dense jungle.",
+        bg: "#3a3a3a"
+      },
+      {
+        title: "River",
+        text: "Pushing through tangled undergrowth, you find a flowing river cutting through the island. It offers a moment of relief. You drink and clean your wounds. A current of tension remains — you're being watched. You decide to follow the river upstream.",
+        bg: "#3c4c48"
+      },
+      {
+        title: "Forest Edge",
+        text: "The river leads you into a forest with a canopy so thick it steals the sunlight. Ferns rustle. Something — someone? — was here before. A faint trail branches off from the river path.",
+        bg: "#2e3d2e"
+      },
+      {
+        title: "Mossy Path",
+        text: "The narrow path is soft beneath your feet. Strange symbols are carved into nearby stones. You feel an ancient presence watching, but see no one. The path forks — one way lit by fireflies, the other pitch dark.",
+        bg: "#364027"
+      },
+      {
+        title: "Shrouded Hollow",
+        text: "You choose the firefly path. It leads to a sunken hollow, filled with mist. In the center is a broken compass and a tattered journal. Pages are unreadable, but one shows a drawing of a gate.",
+        bg: "#2d2a25"
+      },
+      {
+        title: "The Watcher's Tree",
+        text: "A giant tree towers in the distance. At its base are offerings — food, flowers, even a pair of boots. You hear whispers, yet the air is still. You take the boots and move on, uneasily.",
+        bg: "#2b2f26"
+      },
+      {
+        title: "Cave Mouth",
+        text: "Night falls fast. You find a cave and light a fire. Walls glimmer faintly — crystals? The journal said something about ‘light veins.’ You explore cautiously, deeper into the darkness.",
+        bg: "#1e1f1c"
+      },
+      {
+        title: "Crystal Tunnel",
+        text: "The deeper you go, the brighter the cave. Crystals light your path. You find a crude map etched into the stone wall — a star, a gate, a river. You're not the first to come here.",
+        bg: "#252f35"
+      },
+      {
+        title: "Stone Altar",
+        text: "At the tunnel’s end is a carved altar. On it lies a puzzle cube, faintly glowing. You solve it instinctively — it clicks open to reveal a metallic key shaped like a lightning bolt.",
+        bg: "#2e2b2e"
+      },
+      {
+        title: "Gate of Echoes",
+        text: "The jungle opens to a stone archway. It's the gate from the journal. As you approach, the key vibrates. Strange sounds echo beyond — drums? Voices? The gate unlocks.",
+        bg: "#403c39"
+      },
+      {
+        title: "Forgotten Village",
+        text: "Inside is a long-abandoned village. Homes built into trees, tools rusting on the ground. You find evidence of a struggle — claw marks, scattered belongings, a diary entry: 'It wakes when the moon is high...'",
+        bg: "#3f3f3f"
+      },
+      {
+        title: "Signal Tower",
+        text: "Climbing a vine-covered tower, you find a dormant radio. You try the power — static. You change frequency — then a voice cuts in: '...whoever hears this... you're not alone.'",
+        bg: "#313131"
+      },
+      {
+        title: "The Howl",
+        text: "A low growl rumbles through the trees. Your blood freezes. It's close. You grab a spear from the village and ready yourself. You may not be alone — but you’re still in danger.",
+        bg: "#2d2d2d"
+      },
+      {
+        title: "Moonlight Chase",
+        text: "The creature emerges — fast, shadowy, and fierce. You run. Trees blur past as you leap roots and dodge branches. A crevice ahead — you jump, tumbling into darkness.",
+        bg: "#1a1a1a"
+      },
+      {
+        title: "Underground Chamber",
+        text: "You wake in a hidden cavern, safe for now. Symbols line the walls. Your map glows slightly, aligning with the markings. One last route appears — the heart of the island.",
+        bg: "#242424"
+      },
+      {
+        title: "Heart of the Island",
+        text: "You're drawn toward a great tree entwined with glowing veins. The cube begins to hum. You place it in a socket — the earth trembles. Light floods out as mechanisms awaken.",
+        bg: "#37322f"
+      },
+      {
+        title: "The Lift",
+        text: "A platform rises from the earth. You step on, and it lifts you skyward — past roots, past rock, through the jungle canopy. The sky opens above. You've unlocked something.",
+        bg: "#292929"
+      },
+      {
+        title: "The Signal",
+        text: "You return to the tower. This time, the radio responds instantly. A voice says: 'Rescue inbound. Hold your signal. Do not move from your location.' You sit in silence. Hope, at last.",
+        bg: "#1c1c1c"
       }
-      // Add more scenes as needed
     ];
 
     let current = 0;
@@ -74,25 +158,23 @@
     const nextBtn = document.getElementById('nextBtn');
 
     function showScene(index) {
-      if (index < scenes.length) {
-        const scene = scenes[index];
-        titleEl.textContent = scene.title;
-        textEl.textContent = scene.text;
-        document.body.style.backgroundColor = scene.bg;
-      } else {
-        titleEl.textContent = "The End";
-        textEl.textContent = "Thank you for playing.";
-        nextBtn.disabled = true;
-        nextBtn.textContent = "End of Story";
-      }
+      const scene = scenes[index];
+      titleEl.textContent = scene.title;
+      textEl.textContent = scene.text;
+      document.body.style.backgroundColor = scene.bg;
     }
 
     nextBtn.addEventListener('click', () => {
       current++;
-      showScene(current);
+      if (current < scenes.length) {
+        showScene(current);
+      } else {
+        nextBtn.disabled = true;
+        nextBtn.textContent = "End of Story";
+      }
     });
 
     showScene(current);
   </script>
 </body>
-</html>
+  </html
